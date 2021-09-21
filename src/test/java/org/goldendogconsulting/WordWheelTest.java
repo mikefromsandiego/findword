@@ -16,6 +16,7 @@ public class WordWheelTest extends TestCase {
     public void testConstructorCorrectArgs() {
         try {
             WordWheel wordWheel = new WordWheel("ABCDEFGHI");
+            assertNotNull(wordWheel);
         } catch (PermutateStringException e) {
             fail("Unexpected exception " +e.getClass().getName() +" thrown, " +e.getMessage());
         }
@@ -33,7 +34,7 @@ public class WordWheelTest extends TestCase {
 
     public void testConstructorInvalidArgsNumber() {
         try {
-            WordWheel wordWheel = new WordWheel("9BCDEFGHI");
+            new WordWheel("9BCDEFGHI");
             fail("no expected exception thrown");
         } catch (Exception e) {
             assertTrue(e.getMessage().contains("word 9BCDEFGHI is invalid"));
@@ -42,7 +43,7 @@ public class WordWheelTest extends TestCase {
 
     public void testConstructorInvalidArgsWhiteSpace() {
         try {
-            WordWheel wordWheel = new WordWheel("A C\tEFGHI");
+            new WordWheel("A C\tEFGHI");
             fail("no expected exception thrown");
         } catch (Exception e) {
             assertTrue(e.getMessage().contains("word A C\tEFGHI is invalid"));
@@ -112,7 +113,7 @@ public class WordWheelTest extends TestCase {
                 long startTime = System.nanoTime();
                 WordWheel wordWheel = new WordWheel(testString);
                 assertEquals(wordWheel.getUniqueCharacterCount(), (int) testStringsMap.get(testString));
-                boolean result = wordWheel.findWordsThreaded();
+                boolean result = wordWheel.findWords();
                 LOG.info("Evaluating word " +testString +" containing " +wordWheel.getUniqueCharacterCount()
                         +" unique letters took " +computeMsecTime(startTime, System.nanoTime()) +" msecs");
                 assertTrue(result);
@@ -128,28 +129,12 @@ public class WordWheelTest extends TestCase {
             long startTime = System.nanoTime();
 //            WordWheel wordWheel = new WordWheel("OCNINLREI");
             WordWheel wordWheel = new WordWheel("ABCDEFGHI");
-            wordWheel.findWordsThreaded();
+            wordWheel.findWords();
             long endTime = System.nanoTime();
             assertFalse(wordWheel.getCombinationsSet().isEmpty());
             assertEquals(wordWheel.getCombinationsSet().size(), wordWheel.getCombinationsToFind());
             System.out.println("valid words " +wordWheel.getValidWords().size());
             assertEquals(68, wordWheel.getValidWords().size());
-            System.out.println("Time taken " +computeMsecTime(startTime, endTime) +" msecs");
-        } catch (PermutateStringException e) {
-            fail("Unexpected exception " +e.getClass().getName() +" thrown, " +e.getMessage());
-        }
-    }
-
-    public void testSingleThreadedFind() {
-        try {
-            long startTime = System.nanoTime();
-            WordWheel wordWheel = new WordWheel("ABCDEFGHI");
-            wordWheel.findWords();
-            long endTime = System.nanoTime();
-            assertFalse(wordWheel.getCombinationsSet().isEmpty());
-            assertEquals(wordWheel.getCombinationsSet().size(), wordWheel.getCombinationsToFind());
-            System.out.println("vaid words found " +wordWheel.getValidWords().size());
-//            assertTrue(wordWheel.getValidWords().size() == 99);
             System.out.println("Time taken " +computeMsecTime(startTime, endTime) +" msecs");
         } catch (PermutateStringException e) {
             fail("Unexpected exception " +e.getClass().getName() +" thrown, " +e.getMessage());

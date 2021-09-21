@@ -157,44 +157,12 @@ public class WordWheel {
     }
 
     // Public methods
-
-    /**
-     * Single threaded method to find
-     * @return true
-     */
-
- // To Do Depracare/remove this method
-    public boolean findWords() {
-        int count = 0;
-        boolean success = false;
-        long startTime = System.nanoTime();
-        for (String permutation : permutations) {
-            LOG.debug("Evaluating permutation " + count++ + " of " + permutations.size() + "(" + permutation + ") found "
-                    +combinationsSet.size() + " combinations. looking for " +combinationsToFind +" possible combinations, "
-                    +validWords.size() + " words found.");
-            for (int i = 0; i < permutation.length(); i++) {
-                substring(permutation, "", i);
-            }
-            // Safety exit if permutation limit is not found
-            if (count == 400) {
-                LOG.error("Whoops! failed to find maximum combinations possible (" +combinationsToFind +"), took " +computeMsecTime(startTime) +" msec");
-                return false;
-            }
-            if (combinationsSet.size() >= combinationsToFind) {
-                LOG.debug("Found all (" +combinationsSet.size() +") combinations for \"" +centreLetter +wheelLetters +"\"- exiting took " +computeMsecTime (startTime) +" msec");
-                success = true;
-                break;
-            }
-        }
-        return success;
-    }
-
     /**
      *
      * @return true if the source string has been searched and all possible combinations have been found but there are
      * more combinations still to be found, false if there are no more combinations to be found
      */
-    public boolean findWordsThreaded() {
+    public boolean findWords() {
         List<Future<Boolean>> resultList = new ArrayList<>();
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(40);
         for (String permutation : permutations) {
@@ -203,7 +171,6 @@ public class WordWheel {
                 Future<Boolean> result = executor.submit(findCombination);
                 resultList.add(result);
         }
-
         for(Future<Boolean> future : resultList)
         {
             try {
