@@ -50,7 +50,7 @@ public class WordWheelCommandLine {
             System.out.println("centre : " + centre + ", wheel : " + wheel);
             try {
                 WordWheel wordWheel = new WordWheel(centre + wheel);
-                wordWheel.findWordsThreaded();
+                wordWheel.findWords();
                 Set<String> validWords = wordWheel.getValidWords();
                 if (cmd.hasOption("9")) {
                     System.out.println("CL looking for nine letter words");
