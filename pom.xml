@@ -102,7 +102,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.goldendogconsulting.WordWheelCommandLine</mainClass>
+                            <mainClass>uk.org.goldendogconsulting.WordWheelCommandLine</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -115,7 +115,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.goldendogconsulting.WordWheelCommandLine</mainClass>
+                            <mainClass>uk.org.goldendogconsulting.WordWheelCommandLine</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

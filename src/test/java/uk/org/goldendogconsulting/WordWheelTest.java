@@ -1,4 +1,4 @@
-package org.goldendogconsulting;
+package uk.org.goldendogconsulting;
 
 import junit.framework.TestCase;
 import org.apache.logging.log4j.LogManager;

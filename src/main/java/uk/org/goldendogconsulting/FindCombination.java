@@ -1,4 +1,4 @@
-package org.goldendogconsulting;
+package uk.org.goldendogconsulting;
 
 import java.util.Set;
 import java.util.concurrent.Callable;
