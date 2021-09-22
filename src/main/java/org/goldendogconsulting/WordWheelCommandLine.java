@@ -49,8 +49,8 @@ public class WordWheelCommandLine {
             String wheel = cmd.getOptionValue("w").toUpperCase();
             System.out.println("centre : " + centre + ", wheel : " + wheel);
             try {
-                WordWheel wordWheel = new WordWheel(centre + wheel);
-                wordWheel.findWords();
+                WordWheel wordWheel = new WordWheel();
+                wordWheel.findWords(centre + wheel);
                 Set<String> validWords = wordWheel.getValidWords();
                 if (cmd.hasOption("9")) {
                     System.out.println("CL looking for nine letter words");
