@@ -23,54 +23,35 @@ import org.apache.logging.log4j.Logger;
  * @author davidscholefield
  */
 public class WordWheel {
-    private final String centreLetter;
-    private final String wheelLetters;
     private final Set<String> dictionary;
     private final Set<String> permutations;
     private final Map<String, String> permutationCombinationsLookup;
     private final Set<String> combinationsSet;
     private final Set<String> validWords;
-    private final int uniqueCharacterCount;
-    private final int combinationsToFind;
+    private String centreLetter = "";
+    private String wheelLetters = "";
+    private int uniqueCharacterCount;
+    private int combinationsToFind;
 
     private static final Logger LOG = LogManager.getLogger(WordWheel.class);
 
     /**
      *
-     * @param word String (more like a collection of characters) to searched for, convention is that the first letter of
-     *             the String should be in all combinations and words found.
-     * @throws PermutateStringException exception thrown if an error in parsing is encountered
      */
-    public WordWheel(String word) throws PermutateStringException {
+    public WordWheel() throws PermutateStringException {
         // Check validity of string passed
-        if (!isAlpha(word)) {
-            throw new PermutateStringException("word " +word
-                    +" is invalid (null, not nine characters in length or contains non alpha characters");
-        }
-        centreLetter = word.toUpperCase().substring(0,1);
-        wheelLetters = word.toUpperCase().substring(1);
+
         dictionary = new HashSet<>();
         permutations = new HashSet<>();
         permutationCombinationsLookup = new HashMap<>();
-        // This does not work for threads
-//        combinationsSet = new HashSet<>();
-//        validWords = new HashSet<>();
 
-        // This DOES work for threads
-//        combinationsSet = Collections.synchronizedSet(new HashSet<>());
-//        validWords = Collections.synchronizedSet(new HashSet<>());
+        // Note use of thread safe Set object
         combinationsSet = new ConcurrentSkipListSet<>();
         validWords = new ConcurrentSkipListSet<>();
 
-        uniqueCharacterCount = findUniqueCharacterCount(word);
         loadDictionary();
         loadPermutationsCombinationsLookup();
 
-        // Calculate permutations
-        findPermutation(word.toUpperCase(), "");
-        combinationsToFind = Integer.parseInt(permutationCombinationsLookup.get(uniqueCharacterCount +Integer.toString(permutations.size())));
-
-        LOG.debug("Looking for " +combinationsToFind +" combinations of \"" +word +"\"");
     }
 
     // Private class methods
@@ -159,10 +140,26 @@ public class WordWheel {
     // Public methods
     /**
      *
+     *  @param word String (more like a collection of characters) to searched for, convention is that the first letter of
+     *              the String should be in all combinations and words found.
+     *  @throws PermutateStringException exception thrown if an error in parsing is encountered
      * @return true if the source string has been searched and all possible combinations have been found but there are
      * more combinations still to be found, false if there are no more combinations to be found
      */
-    public boolean findWords() {
+    public boolean findWords(String word) throws PermutateStringException {
+        if (!isAlpha(word)) {
+            throw new PermutateStringException("word " +word
+                    +" is invalid (null, not nine characters in length or contains non alpha characters");
+        }
+        centreLetter = word.toUpperCase().substring(0,1);
+        wheelLetters = word.toUpperCase().substring(1);
+        uniqueCharacterCount = findUniqueCharacterCount(word);
+        findPermutation(word.toUpperCase(), "");
+        // Calculate permutations
+        combinationsToFind = Integer.parseInt(permutationCombinationsLookup.get(uniqueCharacterCount +Integer.toString(permutations.size())));
+
+        LOG.debug("Looking for " +combinationsToFind +" combinations of \"" +word +"\"");
+
         List<Future<Boolean>> resultList = new ArrayList<>();
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(40);
         for (String permutation : permutations) {
