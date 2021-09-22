@@ -1,4 +1,4 @@
-package org.goldendogconsulting;
+package uk.org.goldendogconsulting;
 
 public class PermutateStringException extends Exception{
     public PermutateStringException(String s) {

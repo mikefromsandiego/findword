@@ -1,4 +1,4 @@
-package org.goldendogconsulting;
+package uk.org.goldendogconsulting;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
